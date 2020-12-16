@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SnowController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class SnowController : MonoBehaviour
     public ParticleSystem[] emitters;
     public AudioSource musicSource;
 
+    public TextMeshProUGUI text;
+
     
     
     
@@ -28,7 +31,7 @@ public class SnowController : MonoBehaviour
     {
         if (!checkingSpeed)
         {
-            if (Input.acceleration.magnitude > 1.5f)
+            if (Input.acceleration.magnitude > 1.5f || Input.GetKeyDown(KeyCode.S))
             {
                 checkingSpeed = true;
                 shakeTime = 0;
@@ -44,7 +47,7 @@ public class SnowController : MonoBehaviour
                 StopCoroutine(KyoteFrames());
             }
 
-            if (Input.acceleration.magnitude <= 1.2f)
+            if (Input.acceleration.magnitude <= 1.2f || Input.GetKeyUp(KeyCode.S))
             {
                 StartCoroutine(KyoteFrames());
             }
@@ -67,6 +70,7 @@ public class SnowController : MonoBehaviour
             {
                 santaAnim.SetBool("Bobbing", true);
                 snowManAnim.SetBool("Waving", true);
+                text.gameObject.SetActive(false);
                 if (!fadeRunning) StartCoroutine(Volume(1f));
                 for (int i = 0; i < emitters.Length; i++)
                 {
@@ -81,10 +85,12 @@ public class SnowController : MonoBehaviour
             {
                 santaAnim.SetBool("Bobbing", false);
                 snowManAnim.SetBool("Waving", false);
+                text.gameObject.SetActive(true);
                 if (!fadeRunning) StartCoroutine(Volume(0f));
                 for (int i = 0; i < emitters.Length; i++)
                 {
                     emitters[i].Stop();
+                    
                 }
             }
         }
